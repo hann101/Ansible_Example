@@ -1,0 +1,29 @@
+
+name: Ansible Lint && Nginx Playbook
+# Playbook usign AWX REST API
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  AWX_Configuration:
+    needs: [Ansible-Lint]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Deploy Stage
+      id: deploy
+      uses: fjogeleit/http-request-action@master
+      with:
+        url: 'http://{{ example.co.kr }}/api/v2/job_templates/14/launch/'
+
+        method: 'POST'
+        bearerToken: ${{ secrets.AWX_TOKEN }}
+        # add bearToken for AWX REST API
+        
+    - name: AWX Running
+      run: python3 hello.py

@@ -1,0 +1,39 @@
+name: Ansible
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone Git REPO
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible-lint
+          
+      - name : Run Ansible lint
+       
+<<<<<<< HEAD:Ansible.yml
+        run: ansible-lint ./*.yml > output.txt  2>&1
+        # Linting all the Yaml files
+=======
+        run: ansible-lint .\*.yml > output.txt  2>&1
+>>>>>>> 2872550f4db4a979a9457fac115025f3638b7d3f:.github/workflows/Ansible.yml
+        
+      - name : text to HTML
+        if: ${{ failure() }}
+        run: python txt2html.py
+
+
+      - name: Artifact
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name : output

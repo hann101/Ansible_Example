@@ -1,0 +1,39 @@
+name: Ansible Lint && Nginx Playbook
+#Ngnix Playbook 올바른 양식 제안
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  Ansible-Lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+
+      - name: Install dependencies
+        run: |
+          pip install ansible ansible-lint
+      - name : Run Ansible lint
+        run: ansible-lint nginxPlaybook.yaml > output.txt  2>&1
+        continue-on-error: true
+        # Make Ansible-Lint RESULT as .txt
+        
+      - name : text to HTML
+        if: ${{ failure() }}
+        run: python txt2html.py
+        # When it's fail
+        # Turn in to HTML file
+
+
+      - name: Artifact
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name : output
+          path: output.html
+       # Make Artifacts on Git Action

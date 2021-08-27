@@ -1,0 +1,22 @@
+---
+- name: "set nginx"
+  hosts: nginx
+  tasks:
+  - name: git install check
+    yum:
+      name: git
+      state: installed
+
+  - name: git clone 
+    shell: git clone https://{{ ID }}:{{ PW }}@github.com/IPTV-MSA-DevOps/nginx_dev.git;
+
+  - name: overwrite
+    shell: cp -rf nginx_dev/* /etc/nginx/
+
+  - name: delete files
+    shell: rm -rf nginx_dev
+    
+  - name: service restart
+    service:
+      name: nginx
+      state: restarted
