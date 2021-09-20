@@ -1,9 +1,9 @@
 ---
 - name: "Create a directory"
-  hosts: test
+  hosts: all
   tasks:
   - name: "Instantiate"
     file:
-      path: /home/vagrant/
+      path: /home/ubuntu/
       state: directory
       mode: '0644'
